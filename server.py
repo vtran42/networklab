@@ -5,7 +5,7 @@ import sys
 from thread import *
 
 HOST = ''	# Symbolic name meaning all available interfaces
-PORT = 8888	# Arbitrary non-privileged port
+PORT = 3980	# Arbitrary non-privileged port
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 print ('Socket created')
@@ -34,10 +34,12 @@ def clientthread(conn):
 		#Receiving from client
 		data = conn.recv(1024)
 		reply = 'OK...' + data
-		if "!q" in data:
+		# Server close the connect if requesting message contains !q
+		if "!q" in data:	
 			print("!q in data")
 			conn.close()
 
+		# Server send the messages to all other clients if !sendall is in the messages.
 		if "!sendall" in data:
 			sendallClients(data[9:])
    
@@ -49,7 +51,10 @@ def clientthread(conn):
 	#came out of loop
 	conn.close()
 
-
+	"""
+ Functions send all the messages from one client to all other clients 
+if the requesting message contain !sendall 
+	"""
 def sendallClients(message):
     for client in clients_list:
         client.send(message)
