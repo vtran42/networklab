@@ -16,42 +16,43 @@ import sys	#for exit
 try:
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 except socket.error:
-	print ('Failed to create socket')
+	print 'Failed to create socket'
 	sys.exit()
 	
-print ('Socket Created')
-host = input("host: ")
-print('Host name: ' + host)
-#host = 'www.google.com';
+print 'Socket Created'
+
+host = 'www.lovingvincent.com'
+# host = 'www.google.com'
 port = 80;
 
 try:
-	remote_ip = socket.gethostbyname( host )
+	remote_ip = socket.gethostbyname( host )	# Get the IP of the host
 
 except socket.gaierror:
 	#could not resolve
-	print ('Hostname could not be resolved. Exiting')
+	print 'Hostname could not be resolved. Exiting'	
 	sys.exit()
 
 #Connect to remote server
-s.connect((remote_ip , port))
+s.connect((remote_ip , port))	# Connect to the host using the IP address and port number
 
-print ('Socket Connected to ' + host + ' on ip ' + remote_ip)
+print 'Socket Connected to ' + host + ' on ip ' + remote_ip
 
 #Send some data to remote server
 message = "GET / HTTP/1.1\r\n\r\n"
 
 try :
 	#Set the whole string
-	s.sendall(message.encode('utf-8'))
+	s.sendall(message.encode())
 except socket.error:
 	#Send failed
-	print ('Send failed')
+	print 'Send failed'
 	sys.exit()
 
-print ('Message send successfully')
+print 'Message send successfully'
 
 #Now receive data
-reply = s.recv(4096) 
+reply = s.recv(4096)
 
-print (reply)
+print reply
+s.close()	# Close socket
